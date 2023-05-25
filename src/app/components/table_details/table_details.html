@@ -13,6 +13,17 @@
                             </dl>
                         </div>
                     </div>
+                    <div class="something" ng-if="hasData(additional_meta)">
+                         <div class="detail-group" ng-repeat="row in additional_meta">
+                            <div class="detail-body">
+                                <dl class="detail"
+                                    ng-repeat="column in row">
+                                    <dt class="detail-label" ng-repeat="(k, _) in column">{{ k }}</dt>
+                                    <dd class="detail-value" ng-repeat="(_, v) in column">{{ v }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
                     <div class="detail-group">
                         <div class="detail-body">
                             <dl class='detail' ng-if="model.tags != undefined && exclude.indexOf('tags') == -1">
