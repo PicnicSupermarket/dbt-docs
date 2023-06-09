@@ -61,4 +61,6 @@ are used:
   - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/x
   - Fork bugfix: https://github.com/PicnicSupermarket/dbt-docs/pull/y
   - Fork bugfix: https://github.com/PicnicSupermarket/dbt-docs/pull/z
+
+  Description of the feature, and how to use it.
 ```
