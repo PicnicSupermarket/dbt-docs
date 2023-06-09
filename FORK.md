@@ -58,7 +58,7 @@ are used:
 - Add support for foo.
   - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/x
   - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/x
-  - Fork PR: https://github.com/PicnicSupermarket/pull/x
-  - Fork bugfix: https://github.com/PicnicSupermarket/pull/y
-  - Fork bugfix: https://github.com/PicnicSupermarket/pull/z
+  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/x
+  - Fork bugfix: https://github.com/PicnicSupermarket/dbt-docs/pull/y
+  - Fork bugfix: https://github.com/PicnicSupermarket/dbt-docs/pull/z
 ```
