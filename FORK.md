@@ -52,6 +52,29 @@ are used:
 
 ## Changelog
 
+- Add support for rendering additional metadata
+    - Upstream issue: https://github.com/dbt-labs/dbt-core/issues/7021
+    - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/1
+
+  To enable users in adding any metadata to dbt docs in a structured way. The key `meta.additional_meta` is treated
+  differently and rendered in a structured way on the webpage. The structure of `meta` and `additional_meta` should be
+  as follows:
+
+  ```
+      meta:
+        meta_stuff: meta_stuff
+        additional_meta:
+          - - foo: bar
+            - baz: qux
+          - - fiz: buz
+            - bla: bla
+  ```
+
+  `meta_additional` enables users to add rows under the row that contains `meta`. It has to be a list of lists, where
+  each inner list contains dictionaries with one key-val pair. The
+  index of the outer list defines the position of the row, the index of the inner list(s) defines the position inside
+  the row.
+
 - Add support for mermaid.js graphs
   - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/375
   - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/338
