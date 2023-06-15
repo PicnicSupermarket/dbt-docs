@@ -52,6 +52,17 @@ are used:
 
 ## Changelog
 
+- Add support for mermaid.js graphs
+  - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/375
+  - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/338
+  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/3
+
+  [mermaid.js](https://mermaid.js.org/) is a Javascript library to
+  render diagrams and flowcharts built from plain text.
+
+  By using the syntax ```` ```mermaid```` in any markdown file, dbt
+  entities can enhance their catalog page with any mermaid.js diagram.
+
 ## Changelog entry example
 
 ```
