@@ -53,17 +53,17 @@ are used:
 ## Changelog
 
 - Add support for rendering additional metadata
-    - Upstream issue: https://github.com/dbt-labs/dbt-core/issues/7021
+    - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/424
     - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/1
 
-  To enable users in adding any metadata to dbt docs in a structured way. The key `meta.additional_meta` is treated
-  differently and rendered in a structured way on the webpage. The structure of `meta` and `additional_meta` should be
+  To enable users in adding any metadata to dbt docs in a structured way. The key `meta.meta_docs` is treated
+  differently and rendered in a structured way on the webpage. The structure of `meta` and `meta_docs` should be
   as follows:
 
   ```
       meta:
         meta_stuff: meta_stuff
-        additional_meta:
+        meta_docs:
           - - foo: bar
             - baz: qux
           - - fiz: buz

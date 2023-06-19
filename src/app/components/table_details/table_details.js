@@ -180,9 +180,9 @@ angular
                 var sources_meta = nv.hasOwnProperty('sources') ? nv.sources[0] != undefined ? nv.sources[0].source_meta : null : null;
                 scope.meta = nv.meta || sources_meta;
 
-                if (scope.meta && scope.meta.additional_meta) {
-                    scope.additional_meta = scope.meta.additional_meta;
-                    delete scope.meta.additional_meta;
+                if (scope.meta && scope.meta.meta_docs) {
+                    scope.meta_docs = scope.meta.meta_docs;
+                    delete scope.meta.meta_docs;
                 }
 
                 scope.details = getBaseStats(nv);
