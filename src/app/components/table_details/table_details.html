@@ -14,12 +14,13 @@
                         </div>
                     </div>
                     <div class="something" ng-if="hasData(meta_docs)">
-                         <div class="detail-group" ng-repeat="row in meta_docs">
+                        <div class="detail-group" ng-repeat="row in meta_docs">
                             <div class="detail-body">
-                                <dl class="detail"
-                                    ng-repeat="column in row">
-                                    <dt class="detail-label" ng-repeat="(k, _) in column">{{ k }}</dt>
-                                    <dd class="detail-value" ng-repeat="(_, v) in column">{{ v }}</dd>
+                                <dl class="detail" ng-repeat="column in row">
+                                    <div ng-repeat="(k, v) in column">
+                                        <dt class="detail-label">{{ k }}</dt>
+                                        <dd class="detail-value">{{ v }}</dd>
+                                    </div>
                                 </dl>
                             </div>
                         </div>
