@@ -70,7 +70,7 @@ are used:
             - bla: bla
   ```
 
-  `meta_additional` enables users to add rows under the row that contains `meta`. It has to be a list of lists, where
+  `meta_docs` enables users to add rows under the row that contains `meta`. It has to be a list of lists, where
   each inner list contains dictionaries with one key-val pair. The
   index of the outer list defines the position of the row, the index of the inner list(s) defines the position inside
   the row.
