@@ -13,6 +13,18 @@
                             </dl>
                         </div>
                     </div>
+                    <div class="something" ng-if="hasData(meta_docs)">
+                        <div class="detail-group" ng-repeat="row in meta_docs">
+                            <div class="detail-body">
+                                <dl class="detail" ng-repeat="column in row">
+                                    <div ng-repeat="(k, v) in column">
+                                        <dt class="detail-label">{{ k }}</dt>
+                                        <dd class="detail-value">{{ v }}</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
                     <div class="detail-group">
                         <div class="detail-body">
                             <dl class='detail' ng-if="model.tags != undefined && exclude.indexOf('tags') == -1">
