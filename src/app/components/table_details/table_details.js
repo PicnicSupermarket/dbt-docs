@@ -182,7 +182,6 @@ angular
 
                 if (scope.meta && scope.meta.meta_docs) {
                     scope.meta_docs = scope.meta.meta_docs;
-                    delete scope.meta.meta_docs;
                 }
 
                 scope.details = getBaseStats(nv);

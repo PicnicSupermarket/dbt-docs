@@ -8,12 +8,14 @@
                         <div class="detail-body">
                             <dl class="detail"
                                 ng-repeat="(k, v) in meta">
-                                <dt class="detail-label">{{ k }}</dt>
-                                <dd class="detail-value">{{ v }}</dd>
+                                <div ng-if="k != 'meta_docs'">
+                                    <dt class="detail-label">{{ k }}</dt>
+                                    <dd class="detail-value">{{ v }}</dd>
+                                </div>
                             </dl>
                         </div>
                     </div>
-                    <div class="something" ng-if="hasData(meta_docs)">
+                    <div ng-if="hasData(meta_docs)">
                         <div class="detail-group" ng-repeat="row in meta_docs">
                             <div class="detail-body">
                                 <dl class="detail" ng-repeat="column in row">
