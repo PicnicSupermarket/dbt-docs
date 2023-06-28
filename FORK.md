@@ -49,14 +49,11 @@ To help keep things trackable, the following branch naming conventions are used:
 
 ## Changelog
 
-- Fix caching issue for rendering additional metadata
-
-  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/4
-
 - Add support for rendering additional metadata
 
   - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/424
   - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/1
+  - Fork bugfix: https://github.com/PicnicSupermarket/dbt-docs/pull/4
 
   This enables users to add any metadata to dbt docs in a structured way. The key
   `meta.meta_docs` is treated differently and rendered in a structured way on the
