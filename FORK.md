@@ -48,7 +48,8 @@ To help keep things trackable, the following branch naming conventions are used:
 - Bug fix: `[username]/fix-[fix-name]`
 
 ## Changelog
-
+- Fix caching issue for rendering additional metadata
+  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/4
 - Add support for rendering additional metadata
 
   - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/424
