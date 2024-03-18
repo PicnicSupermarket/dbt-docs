@@ -146,6 +146,7 @@ angular
     });
 
     $scope.$watch('search.query', function(q) {
+        console.log("assignSearchRelevanceassignSearchRelevanceassignSearchRelevance");
         $scope.search.results = assignSearchRelevance(projectService.search(q));
     });
 
@@ -153,14 +154,35 @@ angular
         if($scope.search.query === "")
             return results;
         let criteriaArr = {
-            "name": 10,
-            "tags": 5,
+            "name": 5,
+            "tags": 4,
             "description": 3,
             "raw_code": 2,
             "columns": 1
         };
+        let criteriaCountDict = {
+            "name": 0,
+            "tags": 0,
+            "description": 0,
+            // "raw_code": 0,
+            // "columns": 0
+        }
         _.each(results, function(result){
             result.overallWeight = 0;
+            result.criteraCounter = {
+                "name": 0,
+                "tags": 0,
+                "description": 0,
+                "raw_code": 0,
+                "columns": 0
+            };
+            result.criteraWeight = {
+                "name": 0,
+                "tags": 0,
+                "description": 0,
+                "raw_code": 0,
+                "columns": 0
+            };
             _.each(Object.keys(criteriaArr), function(criteria){
                 if(result.model[criteria] != undefined){
                     let count = 0;
@@ -197,6 +219,21 @@ angular
                             }
                         });
                     }
+                    else if(criteria === "name"){
+                        if (body === query) {
+                            console.log("index.js: body: ", body, " query: ", query);
+                            count += 10;
+                        }
+                        else if (body.toLowerCase().startsWith(query)) {
+                            count += 5;
+                        }
+                        else if (body.toLowerCase().endsWith(query)) {
+                            count += 3;
+                        }
+                        else if (body.toLowerCase().includes(query)) {
+                            count++;
+                        }
+                    }
                     else{
                         body = body.toLowerCase();
                         let index = 0;
@@ -207,10 +244,23 @@ angular
                             }
                         }
                     }
+                    result.criteraCounter[criteria] += count;
+                    result.criteraWeight[criteria] += (count * criteriaArr[criteria]);
                     result.overallWeight += (count * criteriaArr[criteria]);
                 }
+                result.counter = criteriaCountDict;
             });
-        }); 
+        });
+        console.log("index.js: before sort results: ", results);
+
+        results.sort(function(a, b) {
+            if (b.criteraWeight["name"] === a.criteraWeight["name"]) {
+                return b.overallWeight - a.overallWeight;
+            }
+            return b.criteraWeight["name"] - a.criteraWeight["name"] // Sorting by 'name' property in ascending order.
+        });
+
+        console.log("index.js: results: ", results);
         return results;
     }
 
