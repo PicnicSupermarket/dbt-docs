@@ -85,13 +85,11 @@ angular
                        }
                     });
                });
-                console.log("search.js: finalResults: ", finalResults);
                return finalResults;
             }
 
             var watchExpressions = ['query', 'checkboxStatus.show_names', 'checkboxStatus.show_descriptions', 'checkboxStatus.show_columns', 'checkboxStatus.show_column_descriptions', 'checkboxStatus.show_code', 'checkboxStatus.show_tags'];
             scope.$watchGroup(watchExpressions, function() {
-                console.log("filterResultsfilterResultsfilterResultsfilterResults");
                 scope.filteredResults = filterResults(scope.results, scope.checkboxStatus);
             });
 

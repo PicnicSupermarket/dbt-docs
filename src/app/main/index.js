@@ -146,7 +146,6 @@ angular
     });
 
     $scope.$watch('search.query', function(q) {
-        console.log("assignSearchRelevanceassignSearchRelevanceassignSearchRelevance");
         $scope.search.results = assignSearchRelevance(projectService.search(q));
     });
 
@@ -160,29 +159,10 @@ angular
             "raw_code": 2,
             "columns": 1
         };
-        let criteriaCountDict = {
-            "name": 0,
-            "tags": 0,
-            "description": 0,
-            // "raw_code": 0,
-            // "columns": 0
-        }
+
         _.each(results, function(result){
             result.overallWeight = 0;
-            result.criteraCounter = {
-                "name": 0,
-                "tags": 0,
-                "description": 0,
-                "raw_code": 0,
-                "columns": 0
-            };
-            result.criteraWeight = {
-                "name": 0,
-                "tags": 0,
-                "description": 0,
-                "raw_code": 0,
-                "columns": 0
-            };
+            result.overallNameWeight = 0;
             _.each(Object.keys(criteriaArr), function(criteria){
                 if(result.model[criteria] != undefined){
                     let count = 0;
@@ -221,7 +201,6 @@ angular
                     }
                     else if(criteria === "name"){
                         if (body === query) {
-                            console.log("index.js: body: ", body, " query: ", query);
                             count += 10;
                         }
                         else if (body.toLowerCase().startsWith(query)) {
@@ -233,6 +212,7 @@ angular
                         else if (body.toLowerCase().includes(query)) {
                             count++;
                         }
+                        result.overallNameWeight += (count * criteriaArr[criteria]);
                     }
                     else{
                         body = body.toLowerCase();
@@ -244,23 +224,18 @@ angular
                             }
                         }
                     }
-                    result.criteraCounter[criteria] += count;
-                    result.criteraWeight[criteria] += (count * criteriaArr[criteria]);
                     result.overallWeight += (count * criteriaArr[criteria]);
                 }
-                result.counter = criteriaCountDict;
             });
         });
-        console.log("index.js: before sort results: ", results);
 
         results.sort(function(a, b) {
-            if (b.criteraWeight["name"] === a.criteraWeight["name"]) {
+            if (b.overallNameWeight === a.overallNameWeight) {
                 return b.overallWeight - a.overallWeight;
             }
-            return b.criteraWeight["name"] - a.criteraWeight["name"] // Sorting by 'name' property in ascending order.
+            return b.overallNameWeight - a.overallNameWeight
         });
 
-        console.log("index.js: results: ", results);
         return results;
     }
 
