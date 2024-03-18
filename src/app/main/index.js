@@ -153,8 +153,8 @@ angular
         if($scope.search.query === "")
             return results;
         let criteriaArr = {
-            "name": 5,
-            "tags": 4,
+            "name": 10,
+            "tags": 5,
             "description": 3,
             "raw_code": 2,
             "columns": 1
@@ -200,18 +200,16 @@ angular
                         });
                     }
                     else if(criteria === "name"){
-                        if (body === query) {
-                            count += 10;
-                        }
-                        else if (body.toLowerCase().startsWith(query)) {
-                            count += 5;
-                        }
-                        else if (body.toLowerCase().endsWith(query)) {
-                            count += 3;
-                        }
-                        else if (body.toLowerCase().includes(query)) {
-                            count++;
-                        }
+                        const calculateNameMatchWeight = (body, query) => {
+                            if (body === query) return 10;
+                            const lowerBody = body.toLowerCase();
+                            if (lowerBody.startsWith(query)) return 5;
+                            if (lowerBody.endsWith(query)) return 3;
+                            if (lowerBody.includes(query)) return 1;
+                            return 0;
+                        };
+
+                        count += calculateNameMatchWeight(body, ($scope.search.query).toLowerCase());
                         result.overallNameWeight += (count * criteriaArr[criteria]);
                     }
                     else{
@@ -229,12 +227,8 @@ angular
             });
         });
 
-        results.sort(function(a, b) {
-            if (b.overallNameWeight === a.overallNameWeight) {
-                return b.overallWeight - a.overallWeight;
-            }
-            return b.overallNameWeight - a.overallNameWeight
-        });
+        results.sort((a, b) => b.overallNameWeight - a.overallNameWeight || b.overallWeight - a.overallWeight);
+
 
         return results;
     }
