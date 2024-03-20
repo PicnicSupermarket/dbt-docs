@@ -20,7 +20,7 @@
                             <div class="detail-body">
                                 <dl class="detail" ng-repeat="column in row">
                                     <div ng-repeat="(k, v) in column">
-                                        <dt class="detail-label">{{ k }}</dt>
+                                        <dt data-toggle="tooltip" title="{{ k }}" class="detail-label">{{ k }}</dt>
                                         <dd class="detail-value">{{ v }}</dd>
                                     </div>
                                 </dl>
