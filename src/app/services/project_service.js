@@ -4,7 +4,7 @@ const $ = require('jquery');
 const _ = require('lodash');
 const { getQuoteChar } = require('./compat');
 
-import merge from 'deepmerge';
+import merge from 'deepmerge'
 
 function capitalizeType(type) {
     var staticCapitalizations = {
@@ -148,7 +148,7 @@ angular
 
             // Add exposures back into nodes to make site logic work
             _.each(service.files.manifest.exposures, function(node) {
-                // Since label is a new field for exposures we don't want to 
+                // Since label is a new field for exposures we don't want to
                 // immediately make docs unusable because the label is empty.
                 // This will default the label to be the name when not filled.
                 if (!node.label){
@@ -156,7 +156,7 @@ angular
                 }
                 service.files.manifest.nodes[node.unique_id] = node;
             });
-            
+
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
                 service.files.manifest.nodes[node.unique_id] = node;
@@ -290,9 +290,9 @@ angular
             'arguments': 'array',
             'label': 'string',
         };
-        
+
         let query_segments = _.words(query.toLowerCase());
-      
+
         for (var i in search_keys) {
 
             // column descriptions are a special case because they are not a top-level key
@@ -353,7 +353,89 @@ angular
                 });
             }
         });
+        res = assignSearchRelevance(res, q)
         return res;
+    }
+
+    function assignSearchRelevance(results, q) {
+        if(q === "")
+            return results;
+       let criteriaArr = {
+            "name": 10,
+            "tags": 5,
+            "description": 3,
+            "raw_code": 2,
+            "columns": 1
+        };
+        _.each(results, function(result){
+            result.overallWeight = 0;
+            result.overallNameWeight = 0;
+            _.each(Object.keys(criteriaArr), function(criteria){
+                if(result.model[criteria] != undefined){
+                    let count = 0;
+                    let body = result.model[criteria];
+                    let query = (q).toLowerCase();
+                    if(criteria === "columns"){
+                        _.each(body, function(column){
+                            // there a spark bug where columns are missign from the catalog.  That
+                            // needs to be fixed outside of docs but this if != null check will
+                            // allow docs to continue to function now and also when the bug is
+                            // fixed.
+                            // relevant issue: https://github.com/dbt-labs/dbt-spark/issues/295
+                            if (column.name) {
+                                let columnName = column.name.toLowerCase();
+                                let index = 0;
+                                while(index != -1){
+                                    index = columnName.indexOf(query, index);
+                                    if (index != -1) {
+                                        count++; index++;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    else if(criteria === "name"){
+                        const calculateNameMatchWeight = (body, query) => {
+                            if (body === query) return 10;
+                            const lowerBody = body.toLowerCase();
+                            if (lowerBody.startsWith(query)) return 5;
+                            if (lowerBody.endsWith(query)) return 3;
+                            if (lowerBody.includes(query)) return 1;
+                            return 0;
+                        };
+
+                        count += calculateNameMatchWeight(body, (q).toLowerCase());
+                        result.overallNameWeight += (count * criteriaArr[criteria]);
+
+                    }
+                    else if(criteria === "tags"){
+                        _.each(body, function(tag){
+                            let tagName = tag.toLowerCase();
+                            let index = 0;
+                            while(index != -1){
+                                index = tagName.indexOf(query, index);
+                                if (index != -1) {
+                                    count++; index++;
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        body = body.toLowerCase();
+                        let index = 0;
+                        while(index != -1){
+                            index = body.indexOf(query, index);
+                            if(index != -1){
+                                count++; index++;
+                            }
+                        }
+                    }
+                    result.overallWeight += (count * criteriaArr[criteria]);
+                }
+            });
+        });
+        results.sort((a, b) => b.overallNameWeight - a.overallNameWeight || b.overallWeight - a.overallWeight);
+        return results
     }
 
     function clean_project_macros(macros, adapter) {
@@ -402,10 +484,10 @@ angular
 
             var exposures = _.values(service.project.exposures);
             service.tree.exposures = buildExposureTree(exposures, select);
-            
+
             var metrics = _.values(service.project.metrics);
             service.tree.metrics = buildMetricTree(metrics, select);
-            
+
             var semantic_models = _.values(service.project.semantic_models);
             service.tree.semantic_models = buildSemanticModelTree(semantic_models, select);
 
@@ -542,7 +624,7 @@ angular
 
         return exposures
     }
-    
+
     function buildMetricTree(nodes, select) {
         var metrics = {}
 
@@ -797,7 +879,7 @@ angular
             if (node.resource_type in excludeNodes || !show || node.access === "private") {
                 return;
             }
-            
+
             if (node.resource_type == 'model' && node.version != null) {
                 var display_name = node.name + "_v" + node.version;
             } else {
