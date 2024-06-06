@@ -4,7 +4,7 @@ const $ = require('jquery');
 const _ = require('lodash');
 const { getQuoteChar } = require('./compat');
 
-import merge from 'deepmerge'
+import merge from 'deepmerge';
 
 function capitalizeType(type) {
     var staticCapitalizations = {
@@ -148,7 +148,7 @@ angular
 
             // Add exposures back into nodes to make site logic work
             _.each(service.files.manifest.exposures, function(node) {
-                // Since label is a new field for exposures we don't want to
+                // Since label is a new field for exposures we don't want to 
                 // immediately make docs unusable because the label is empty.
                 // This will default the label to be the name when not filled.
                 if (!node.label){
@@ -156,7 +156,7 @@ angular
                 }
                 service.files.manifest.nodes[node.unique_id] = node;
             });
-
+            
             // Add metrics back into nodes to make site logic work
             _.each(service.files.manifest.metrics, function(node) {
                 service.files.manifest.nodes[node.unique_id] = node;
@@ -290,9 +290,9 @@ angular
             'arguments': 'array',
             'label': 'string',
         };
-
+        
         let query_segments = _.words(query.toLowerCase());
-
+      
         for (var i in search_keys) {
 
             // column descriptions are a special case because they are not a top-level key
@@ -333,31 +333,7 @@ angular
         return objects
     }
 
-    service.search = function(q) {
-        if (q.length == 0) {
-            return _.map(service.project.searchable, function(model) {
-                return {
-                    model: model,
-                    matches: []
-                }
-            })
-        }
-
-        var res = [];
-        _.each(service.project.searchable, function(model) {
-            var matches = fuzzySearchObj(q, model);
-            if (matches.length) {
-                res.push({
-                    model: model,
-                    matches: matches,
-                });
-            }
-        });
-        res = assignSearchRelevance(res, q)
-        return res;
-    }
-
-    function assignSearchRelevance(results, q) {
+     function assignSearchRelevance(results, q) {
         if(q === "")
             return results;
        let criteriaArr = {
@@ -438,6 +414,30 @@ angular
         return results
     }
 
+    service.search = function(q) {
+        if (q.length == 0) {
+            return _.map(service.project.searchable, function(model) {
+                return {
+                    model: model,
+                    matches: []
+                }
+            })
+        }
+
+        var res = [];
+        _.each(service.project.searchable, function(model) {
+            var matches = fuzzySearchObj(q, model);
+            if (matches.length) {
+                res.push({
+                    model: model,
+                    matches: matches,
+                });
+            }
+        });
+        res = assignSearchRelevance(res, q);
+        return res;
+    }
+
     function clean_project_macros(macros, adapter) {
         var all_macros = macros || [];
 
@@ -484,10 +484,10 @@ angular
 
             var exposures = _.values(service.project.exposures);
             service.tree.exposures = buildExposureTree(exposures, select);
-
+            
             var metrics = _.values(service.project.metrics);
             service.tree.metrics = buildMetricTree(metrics, select);
-
+            
             var semantic_models = _.values(service.project.semantic_models);
             service.tree.semantic_models = buildSemanticModelTree(semantic_models, select);
 
@@ -624,7 +624,7 @@ angular
 
         return exposures
     }
-
+    
     function buildMetricTree(nodes, select) {
         var metrics = {}
 
@@ -879,7 +879,7 @@ angular
             if (node.resource_type in excludeNodes || !show || node.access === "private") {
                 return;
             }
-
+            
             if (node.resource_type == 'model' && node.version != null) {
                 var display_name = node.name + "_v" + node.version;
             } else {
