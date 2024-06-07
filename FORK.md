@@ -86,6 +86,18 @@ To help keep things trackable, the following branch naming conventions are used:
   By using the syntax ` ```mermaid ` in any markdown file, dbt entities can enhance
   their catalog page with any mermaid.js diagram.
 
+- Prioritise exact file name matches over fuzzy matches
+
+  - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/503
+  - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/217
+  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/8
+
+  Adds an additional step to the relevance calculation process. Now, a weight 
+  value is also computed and stored for the name field. Finally, the results are 
+  sorted first by overallNameWeight and then by overallWeight.
+
+
+
 ## Changelog entry example
 
 ```
