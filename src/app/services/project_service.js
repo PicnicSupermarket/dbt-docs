@@ -3,6 +3,7 @@ const angular = require('angular');
 const $ = require('jquery');
 const _ = require('lodash');
 const { getQuoteChar } = require('./compat');
+const { assignSearchRelevance } = require('./project_service_utils');
 
 import merge from 'deepmerge';
 
@@ -334,7 +335,7 @@ angular
     }
 
     service.search = function(q) {
-        if (q.length == 0) {
+        if (q.length === 0) {
             return _.map(service.project.searchable, function(model) {
                 return {
                     model: model,
@@ -353,7 +354,7 @@ angular
                 });
             }
         });
-        return res;
+        return assignSearchRelevance(res, q);
     }
 
     function clean_project_macros(macros, adapter) {
