@@ -96,8 +96,7 @@ To help keep things trackable, the following branch naming conventions are used:
   value is also computed and stored for the name field. Finally, the results are 
   sorted first by overallNameWeight and then by overallWeight.
 
-
-
+  
 ## Changelog entry example
 
 ```
