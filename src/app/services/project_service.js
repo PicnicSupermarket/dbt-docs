@@ -434,8 +434,7 @@ angular
                 });
             }
         });
-        res = assignSearchRelevance(res, q);
-        return res;
+        return assignSearchRelevance(res, q);
     }
 
     function clean_project_macros(macros, adapter) {
