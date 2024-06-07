@@ -63,7 +63,6 @@ angular
                 if(!_.some(_.values(checkboxStatus))){
                     return results;
                 }
-
                 let finalResults = [];
                 let fileIDs = [];
 
@@ -94,7 +93,7 @@ angular
             });
 
             scope.shorten = function(text) {
-                if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){
+                 if(text != null && text.trim().length > 0 && scope.query != null && scope.query.trim().length > 0){
                     let modified = text.replace(/\s+/g, ' ');
                     //choose the first word in the search as the anchor for shortening.
                     //Escaping in case the first token is "*" or another reserved regex character
@@ -105,7 +104,7 @@ angular
                     let shortened = "..." + modified.substring(startIndex, endIndex) + "...";
                     return shortened;
                  }
-                return text;
+                 return text;
             }
 
             scope.highlight = function(text) {
