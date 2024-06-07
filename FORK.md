@@ -86,7 +86,7 @@ To help keep things trackable, the following branch naming conventions are used:
   By using the syntax ` ```mermaid ` in any markdown file, dbt entities can enhance
   their catalog page with any mermaid.js diagram.
 
-- Prioritise exact file name matches over fuzzy matches
+- Prioritise exact file name matches over fuzzy matches when conducting a search.
 
   - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/503
   - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/217
