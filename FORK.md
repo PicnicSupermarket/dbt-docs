@@ -96,6 +96,15 @@ To help keep things trackable, the following branch naming conventions are used:
   value is also computed and stored for the name field. Finally, the results are 
   sorted first by overallNameWeight and then by overallWeight.
 
+- Show first order dependencies in lineage graph.
+  
+  - Upstream PR: https://github.com/dbt-labs/dbt-docs/pull/517
+  - Upstream issue: https://github.com/dbt-labs/dbt-docs/issues/516
+  - Fork PR: https://github.com/PicnicSupermarket/dbt-docs/pull/10
+
+  In large projects showing the full lineage is slow and unintuitive. Therefore, 
+  only show the first order dependencies in the lineage graph.
+
   
 ## Changelog entry example
 

@@ -54,17 +54,17 @@ angular
     service.resetSelection = function(node) {
         var include_selection;
         if (node && _.includes(['model', 'seed', 'snapshot'], node.resource_type)) {
-            include_selection = '+' + node.name + '+';
+            include_selection = '1+' + node.name + '+1';
         } else if (node && node.resource_type == 'source') {
-            include_selection = '+source:' + node.source_name + "." + node.name + '+';
+            include_selection = '1+source:' + node.source_name + "." + node.name + '+1';
         } else if (node && node.resource_type == 'exposure') {
-            include_selection = '+exposure:' + node.name;
+            include_selection = '1+exposure:' + node.name;
         } else if (node && node.resource_type == 'metric') {
-            include_selection = '+metric:' + node.name;
+            include_selection = '1+metric:' + node.name;
         } else if (node && node.resource_type == 'semantic_model') {
-            include_selection = '+semantic_model:' + node.name;
+            include_selection = '1+semantic_model:' + node.name;
         } else if (node && _.includes(['analysis', 'test'], node.resource_type)) {
-            include_selection = '+' + node.name;
+            include_selection = '1+' + node.name;
         } else {
             include_selection = "";
         }
