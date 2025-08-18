@@ -13,12 +13,14 @@ const templates = {
     source: require('./docs/source.html'),
     snapshot: require('./docs/snapshot.html'),
     seed: require('./docs/seed.html'),
+    unit_test: require('./docs/unit_test.html'),
     test: require('./docs/test.html'),
     analysis: require('./docs/analysis.html'),
     macro: require('./docs/macro.html'),
     exposure: require('./docs/exposure.html'),
     metric: require('./docs/metric.html'),
     semantic_model: require('./docs/semantic_model.html'),
+    saved_query: require('./docs/saved_query.html'),
     operation: require('./docs/operation.html'),
 }
 
@@ -74,6 +76,14 @@ angular
             url: 'snapshot/:unique_id?section&' + graph_params,
             controller: 'SnapshotCtrl',
             templateUrl: templates.snapshot,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.unit_test', {
+            url: 'unit_test/:unique_id?section&' + graph_params,
+            controller: 'TestCtrl',
+            templateUrl: templates.unit_test,
             params: {
                 unique_id: {type: 'string'}
             },
@@ -138,6 +148,14 @@ angular
             url: 'semantic_model/:unique_id?section&' + graph_params,
             controller: 'SemanticModelCtrl',
             templateUrl: templates.semantic_model,
+            params: {
+                unique_id: {type: 'string'}
+            },
+        })
+        .state('dbt.saved_query', {
+            url: 'saved_query/:unique_id?section&' + graph_params,
+            controller: 'SavedQueryCtrl',
+            templateUrl: templates.saved_query,
             params: {
                 unique_id: {type: 'string'}
             },
