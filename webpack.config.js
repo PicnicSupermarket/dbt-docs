@@ -1,16 +1,25 @@
 const path = require("path");
 const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackInlineSourcePlugin = require("html-webpack-inline-source-plugin");
+const HtmlInlineScriptPlugin = require("html-inline-script-webpack-plugin");
 
 const BUILD_ENV = process.env.DBT_DOCS_ENV || "production";
 
 module.exports = {
+  resolve: {
+    extensions: ['.js', '.html', '.css'],
+    alias: {
+      'cytoscape': path.resolve(__dirname, 'node_modules/cytoscape')
+    }
+  },
   devtool:
     BUILD_ENV == "development" ? "eval-cheap-module-source-map" : "source-map",
   entry: "./src/app/index.run.js",
   output: {
     path: path.resolve(__dirname, "dist"),
+    clean: true,
+    publicPath: '',
   },
   devServer: {
     client: {
@@ -32,7 +41,7 @@ module.exports = {
       inlineSource: ".(js|css)$",
     }),
 
-    new HtmlWebpackInlineSourcePlugin(),
+    new HtmlInlineScriptPlugin(),
   ],
   mode: BUILD_ENV,
   module: {
@@ -45,29 +54,43 @@ module.exports = {
               "ngtemplate-loader?relativeTo=" +
               path.resolve(__dirname, "./src/app"),
           },
-          { loader: "html-loader" },
+          { 
+            loader: "html-loader",
+            options: {
+              minimize: false,
+            }
+          },
         ],
       },
       {
         test: /\.css$/,
-        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
-        use: "base64-inline-loader",
+        type: 'asset/inline',
       },
       {
         test: /\.svg$/,
-        loader: "svg-url-loader",
-        options: {
-          // Images larger than 10 KB won’t be inlined
-          limit: 10 * 1024,
-          noquotes: true,
-        },
+        type: 'asset/inline',
+        generator: {
+          dataUrl: {
+            encoding: 'base64',
+            mimetype: 'image/svg+xml'
+          }
+        }
       },
       {
         test: /\.(png|ico|webmanifest)$/,
-        use: "base64-inline-loader?limit=1000&name=[name].[ext]",
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 1000
+          }
+        },
+        generator: {
+          filename: '[name][ext]'
+        }
       },
     ],
   },

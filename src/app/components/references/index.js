@@ -34,7 +34,9 @@ angular
                 } else if (type == 'seed') {
                     return 'Seeds';
                 } else if (type == 'test') {
-                    return 'Tests';
+                    return 'Data Tests';
+                } else if (type == 'unit_test') {
+                    return 'Unit Tests';
                 } else if (type == 'snapshot') {
                     return 'Snapshots'
                 } else if (type == 'analysis') {
@@ -47,6 +49,8 @@ angular
                     return 'Metrics';
                 } else if (type == 'semantic_model') {
                     return 'Semantic Models';
+                } else if (type == 'saved_query') {
+                    return 'Saved Queries';
                 } else if (type == 'operation') {
                     return 'Operations';
                 } else {

@@ -22,7 +22,14 @@ angular
 .module('dbt')
 .factory('project', ['$q', '$http', function($q, $http) {
 
-    var TARGET_PATH = '';
+    // These tokens will pass-through any webpack process, and
+    // enable replacement of the strings for objects containing
+    // the data for the manifest and catalog (manifest.json and
+    // catalog.json).
+    var INLINE_FILES = {
+      'manifest': 'MANIFEST.JSON INLINE DATA',
+      'catalog': 'CATALOG.JSON INLINE DATA'
+    }
 
     var service = {
         project: {},
@@ -96,6 +103,16 @@ angular
     }
 
     function loadFile(label, path) {
+
+        // If there is an INLINE_FILES that isn't a string (must be JSON data),
+        // use it directly.
+        if (label in INLINE_FILES && typeof INLINE_FILES[label] === "object") {
+          return {
+            label: label,
+            data: INLINE_FILES[label]
+          }
+        }
+
         return $http({
             method: 'GET',
             url: path
@@ -119,8 +136,8 @@ angular
     service.loadProject = function() {
         var cache_bust = "?cb=" + (new Date()).getTime();
         var promises = [
-            loadFile('manifest', TARGET_PATH + "manifest.json" + cache_bust),
-            loadFile('catalog', TARGET_PATH + "catalog.json" + cache_bust),
+            loadFile('manifest', "manifest.json" + cache_bust),
+            loadFile('catalog', "catalog.json" + cache_bust),
         ]
 
         $q.all(promises).then(function(files) {
@@ -165,6 +182,18 @@ angular
 
             // Add semantic models back into nodes to make site logic work
             _.each(service.files.manifest.semantic_models, function(node) {
+                service.files.manifest.nodes[node.unique_id] = node;
+                node.label = node.name;
+            });
+
+            // Add saved queries back into nodes to make site logic work
+            _.each(service.files.manifest.saved_queries, function(node) {
+                service.files.manifest.nodes[node.unique_id] = node;
+                node.label = node.name;
+            });
+
+            // Add unit tests into nodes
+            _.each(service.files.manifest.unit_tests, function(node) {
                 service.files.manifest.nodes[node.unique_id] = node;
                 node.label = node.name;
             });
@@ -262,7 +291,7 @@ angular
             });
 
             var search_nodes = _.filter(service.project.nodes, function(node) {
-                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model'], node.resource_type);
+                return _.includes(['model', 'source', 'seed', 'snapshot', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query'], node.resource_type);
             });
 
             service.project.searchable = _.filter(search_nodes.concat(search_macros), function(obj) {
@@ -390,7 +419,7 @@ angular
                     return true;
                 }
 
-                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'semantic_model'];
+                var accepted = ['snapshot', 'source', 'seed', 'model', 'analysis', 'exposure', 'metric', 'semantic_model', 'saved_query'];
                 return _.includes(accepted, node.resource_type);
             })
 
@@ -409,6 +438,9 @@ angular
             
             var semantic_models = _.values(service.project.semantic_models);
             service.tree.semantic_models = buildSemanticModelTree(semantic_models, select);
+
+            var saved_queries = _.values(service.project.saved_queries);
+            service.tree.saved_queries = buildSavedQueryTree(saved_queries, select);
 
             cb(service.tree);
         });
@@ -441,6 +473,7 @@ angular
         service.updateSelectedInTree(select, service.tree.exposures);
         service.updateSelectedInTree(select, service.tree.metrics);
         service.updateSelectedInTree(select, service.tree.semantic_models);
+        service.updateSelectedInTree(select, service.tree.saved_queries);
 
         return service.tree;
     }
@@ -624,6 +657,46 @@ angular
         return semantic_models
     }
 
+    function buildSavedQueryTree(nodes, select) {
+        var saved_queries = {}
+
+        _.each(nodes, function(node) {
+            var name = node.name;
+
+            var project = node.package_name;
+
+            var is_active = node.unique_id == select;
+
+            if (!saved_queries[project]) {
+                saved_queries[project] = {
+                    type: "folder",
+                    name: project,
+                    active: is_active,
+                    items: []
+                };
+            } else if (is_active) {
+                saved_queries[project].active = true;
+            }
+
+            saved_queries[project].items.push({
+                type: 'file',
+                name: node.name,
+                node: node,
+                active: is_active,
+                unique_id: node.unique_id,
+                node_type: 'saved_query'
+            })
+        });
+
+        var saved_queries = _.sortBy(_.values(saved_queries), 'name');
+
+        _.each(saved_queries, function(saved_query) {
+            saved_queries.items = _.sortBy(saved_queries.items, 'name');
+        });
+
+        return saved_queries
+    }
+
     function consolidateAdapterMacros(macros, adapter) {
         var adapter_macros = {};
         _.each(macros, function(macro) {
@@ -670,7 +743,7 @@ angular
 
         _.each(nodes.concat(macros), function(node) {
             var show = _.get(node, ['docs', 'show'], true);
-            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric' || node.resource_type == 'semantic_model') {
+            if (node.resource_type == 'source' || node.resource_type == 'exposure' || node.resource_type == 'metric' || node.resource_type == 'semantic_model' || node.resource_type == 'saved_query') {
                 // no sources in the model tree, sorry
                 return;
             } else if (!show) {
